@@ -12,6 +12,13 @@ Recognize AppleTV18,1 devices reported by pyatv 0.18 as an unknown model and ope
 - Installation branch: main
 - Package version: 1.16.0-pponce.1
 
+## Current state
+
+- Compatibility commit 33462a233b19c0dba5640179c64ab20734fb0686 is pushed to main and fix/appletv18-discovery.
+- The remote helper and package scripts were read back and verified after the push.
+- No GitHub Actions runs or check results appeared for that commit. Do not treat the full build as validated.
+- Remote commits preserve the existing repository history. The authoring workspace used a text source snapshot for local validation; its synthetic local root commit must not be pushed to GitHub.
+
 ## Changes
 
 - Centralize the discovery filter in src/deviceSupport.ts.
@@ -25,6 +32,7 @@ Recognize AppleTV18,1 devices reported by pyatv 0.18 as an unknown model and ope
 - Five discovery regression tests passed on Node 24.22.1, including mixed-device scans and rejection of unrelated AirPlay devices.
 - Node's TypeScript parser accepted the changed source files.
 - Package and lockfile versions match; git diff --check passed.
+- The README installation block passed Bash syntax checking and simulated success, stop failure, add failure and start failure scenarios. It attempts to start Homebridge after an add failure and always prints an END marker.
 - Full dependency installation in the authoring workspace was blocked by a registry HTTP 403. Full lint and TypeScript compilation therefore require GitHub Actions or the installation host.
 - Live PIN pairing, app control, power state and playback monitoring remain to be verified on hardware.
 
