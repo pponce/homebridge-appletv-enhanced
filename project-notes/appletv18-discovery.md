@@ -10,7 +10,7 @@ Recognize AppleTV18,1 devices reported by pyatv 0.18 as an unknown model and ope
 - Base commit: edb204810a5a5af6c40d2a167621af0a78b2e473
 - Validation branch: fix/appletv18-discovery
 - Installation branch: main
-- Package version: 1.16.0-pponce.1
+- Package version: 1.16.0
 
 ## Current state
 
