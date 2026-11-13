@@ -1,6 +1,10 @@
 name: Build
 
 on:
+  push:
+    branches:
+      - main
+      - fix/appletv18-discovery
   pull_request:
     paths:
       - "**.ts"
@@ -89,6 +93,26 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
-      - name: Build
+      - name: Install and build
         shell: bash
-        run: npm run build
+        run: npm ci --no-audit --no-fund
+
+      - name: Test device discovery
+        shell: bash
+        run: npm test
+
+      - name: Verify installable package
+        shell: bash
+        run: |
+          npm pack --ignore-scripts --dry-run --json > package-contents.json
+          node <<'JS'
+          const assert = require('node:assert/strict');
+          const files = new Set(require('./package-contents.json')[0].files.map(file => file.path));
+          for (const file of ['dist/index.js', 'dist/deviceSupport.js', 'dist/html/input.html',
+            'dist/html/afterPost.html', 'dist/html/backOff.html', 'config.schema.json', 'requirements.txt']) {
+            assert(files.has(file), `Missing package file: ${file}`);
+          }
+          const { isSupportedAppleTV } = require('./dist/deviceSupport');
+          assert(isSupportedAppleTV({ model: 'Unknown', modelName: 'AppleTV18,1', os: 'Unknown' }));
+          JS
+

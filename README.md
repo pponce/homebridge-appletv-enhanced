@@ -16,6 +16,34 @@
 
 This plugin automatically discovers Apple TV devices on the local network and exposes each one as a HomeKit Set-Top Box.
 
+## Install this fork from GitHub
+
+This fork includes discovery support for Apple TV model `AppleTV18,1`, including when pyatv reports its model and operating system as unknown. Existing supported Apple TV models continue to use the standard discovery checks.
+
+On a Linux host using the Homebridge APT package, run:
+
+```bash
+{
+  printf '\n=== START: Install Apple TV Enhanced from GitHub ===\n'
+  atv_install_status=0
+  if sudo hb-service stop; then
+    sudo hb-service add 'git+https://github.com/pponce/homebridge-appletv-enhanced.git#main' || atv_install_status=$?
+    sudo hb-service start || atv_install_status=$?
+  else
+    atv_install_status=$?
+  fi
+  if [ "$atv_install_status" -eq 0 ]; then
+    printf '\n=== END: Installation completed; Homebridge started ===\n'
+  else
+    printf '\n=== END: Installation or service command failed (status %s); review the output above ===\n' "$atv_install_status"
+  fi
+}
+```
+
+The GitHub installation builds the plugin automatically. Keep the Apple TV awake, then follow the pairing URL in the Homebridge logs and enter the PIN displayed on the TV. Each Apple TV must also be added separately to Apple Home using the setup code from the plugin logs.
+
+For development, run `npm ci` to install dependencies and build the plugin, `npm test` to run discovery regression tests, and `npm run build` to rebuild after source changes.
+
 > [!NOTE]
 >
 > ### Before opening a new issue ...
@@ -288,3 +316,4 @@ Also see [device specific overrides](https://github.com/maxileith/homebridge-app
 
 -   Apple TVs report a MAC-Address that is different from the MAC-Address that you will see in the network settings of your Apple TV when scanning for devices. Therefore, when blacklisting Apple TVs use the MAC-Address from the logs.
 -   See also [open bugs](https://github.com/maxileith/homebridge-appletv-enhanced/issues?q=is%3Aissue+is%3Aopen+label%3Abug).
+
